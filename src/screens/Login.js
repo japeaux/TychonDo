@@ -125,12 +125,6 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius:15,
     },
-    logo: {
-        width: 100,
-        height: 100,
-        margin: 20,
-    },
-    
     input: {
         width: 300,
         borderWidth: 1,

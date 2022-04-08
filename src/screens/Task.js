@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, Modal, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native'
+import { Alert, Modal, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, Button, } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import CustomButton from '../containers/CustomButton';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CheckBox from '@react-native-community/checkbox';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import RNFS from 'react-native-fs';
+import DatePicker from 'react-native-date-picker'
 
 export default function Task({ navigation }) {
 
@@ -19,6 +20,8 @@ export default function Task({ navigation }) {
     const [done, setDone] = useState(false);
     const [color, setColor] = useState('white');
     const [image, setImage] = useState('');
+    const [date, setDate] = useState(new Date())
+    const [open, setOpen] = useState(false)
 
     useEffect(() => {
         navigation.addListener('focus', () => {
@@ -42,7 +45,6 @@ export default function Task({ navigation }) {
             Alert.alert('Warning!', 'Please write your task title.')
         } else {
             var datecreation = new Date().toLocaleString()
-            console.log(datecreation)
             try {
                 var Task = {
                     ID: taskID,
@@ -52,6 +54,7 @@ export default function Task({ navigation }) {
                     Color: color,
                     Image: image,
                     Date: datecreation,
+                    Duedate: date,
                 }
                 const index = tasks.findIndex(task => task.ID === taskID);
                 let newTasks = [];
@@ -126,9 +129,9 @@ export default function Task({ navigation }) {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.color_red}
-                        onPress={() => { setColor('red') }}
+                        onPress={() => { setColor('1red') }}
                     >
-                        {color === 'red' &&
+                        {color === '1red' &&
                             <FontAwesome5
                                 name={'check'}
                                 size={25}
@@ -137,10 +140,10 @@ export default function Task({ navigation }) {
                         }
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.color_blue}
-                        onPress={() => { setColor('blue') }}
+                        style={styles.color_orange}
+                        onPress={() => { setColor('2orange') }}
                     >
-                        {color === 'blue' &&
+                        {color === '2orange' &&
                             <FontAwesome5
                                 name={'check'}
                                 size={25}
@@ -150,9 +153,9 @@ export default function Task({ navigation }) {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.color_green}
-                        onPress={() => { setColor('green') }}
+                        onPress={() => { setColor('3green') }}
                     >
-                        {color === 'green' &&
+                        {color === '3green' &&
                             <FontAwesome5
                                 name={'check'}
                                 size={25}
@@ -173,6 +176,21 @@ export default function Task({ navigation }) {
                             color={'#ffffff'}
                         />
                     </TouchableOpacity>
+                </View>
+                <View>
+                <Button title="Open" onPress={() => setOpen(true)} />
+                    <DatePicker
+                        modal
+                        open={open}
+                        date={date}
+                        onConfirm={(date) => {
+                        setOpen(false)
+                        setDate(date)
+                        }}
+                        onCancel={() => {
+                        setOpen(false)
+                        }}
+                    />
                 </View>
                 {image ?
                     <View>
@@ -261,9 +279,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    color_blue: {
+    color_orange: {
         flex: 1,
-        backgroundColor: '#aecbfa',
+        backgroundColor: '#f2c382',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -291,49 +309,6 @@ const styles = StyleSheet.create({
     centered_view: {
         flex: 1,
         backgroundColor: '#00000099',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    bell_modal: {
-        width: 300,
-        height: 200,
-        backgroundColor: '#ffffff',
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#000000',
-    },
-    bell_body: {
-        height: 150,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    bell_buttons: {
-        flexDirection: 'row',
-        height: 50,
-    },
-    bell_input: {
-        width: 50,
-        borderWidth: 1,
-        borderColor: '#555555',
-        borderRadius: 10,
-        backgroundColor: '#ffffff',
-        textAlign: 'center',
-        fontSize: 20,
-        margin: 10,
-    },
-    bell_cancel_button: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: '#000000',
-        borderBottomLeftRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    bell_ok_button: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: '#000000',
-        borderBottomRightRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
     },
